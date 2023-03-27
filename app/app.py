@@ -1,8 +1,12 @@
-from flask import Flask
+from flask import Blueprint
+from . import db
 
-app = Flask(__name__)
+main = Blueprint('main', __name__)
 
-
-@app.route("/")
+@main.route('/')
 def index():
-    return "caca"
+    return 'Index'
+
+@main.route('/profile')
+def profile():
+    return 'Profile'
