@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from flask import render_template
 from markupsafe import escape
 import sqlite3
 
@@ -30,18 +31,20 @@ conn.close()
 
 @app.route("/profile")
 def profile():
-    cur = conn.execute('SELECT * FROM users')
+    db = sqlite3.connect('database.db')
+    cur = db.execute('SELECT * FROM users')
     rows = cur.fetchall()
+    columns = [column[0] for column in cur.description]
     
     html = "<ul>"
     for row in rows:
-        html += "<li>" + row['username'] + ", " + row['email'] + "</li>"
+        html += "<li>" + row[columns.index('username')] + ", " + row[columns.index('email')] + "</li>"
     html += "</ul>"
-    return html
+    
+    db.close()
+    return render_template("list.html", context=columns)
+
 
 @app.route('/')
 def index():
-    conn2 = sqlite3.connect('database.db')
-    cur = conn2.execute('SELECT username FROM users')
-    conn2.close()
-    return f'<h1>This is a Flask app of {cur}<h1>'
+    return f'<h1>This is a Flask app<h1>'
