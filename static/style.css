@@ -80,3 +80,9 @@ input:focus {
     display: block;
     margin-top: 12px;
 }
+
+.alert-error {
+    justify-content: center;
+    text-align: center;
+    color: red;
+}

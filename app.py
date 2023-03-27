@@ -1,11 +1,11 @@
+from operator import length_hint
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from markupsafe import escape
 import sqlite3
 import os
 
 app = Flask(__name__)
-# app.secret_key = os.urandom(12)
-app.config['SECRET_KEY'] = 'your-secret-key-here'
+app.config['SECRET_KEY'] = os.urandom(12)
 
 # Connection to the DB
 conn = sqlite3.connect('database.db')
@@ -14,6 +14,8 @@ conn = sqlite3.connect('database.db')
 with open('schema.sql', 'r') as f:
     schema = f.read()
 conn.executescript(schema)
+
+# conn.execute()
 
 # Close the BD connection
 conn.close()
@@ -46,12 +48,19 @@ def signup():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
-        if password.length >= 4 and username == 'admin':
-            session['logged_in'] = True
-            flash('You were successfully logged in')
-            return redirect("/")
+        if length_hint(password) < 4:
+            flash("Password has to been 4 characters length minimum", 'error')
+            return render_template("signup.html")
+        elif username.length() < 4:
+            flash("Username has to been 4 characters length minimum", 'error')
+            return render_template("signup.html")
+        elif email.length() < 4:
+            flash("Email has to been 4 characters length minimum", 'error')
+            return render_template("signup.html")
         else:
-            flash('wrong password!')
+            session['logged_in'] = True
+            flash('You were successfully Sign up')
+            return redirect("/")
     return render_template("signup.html")
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -61,7 +70,6 @@ def login():
         password = request.form['password']
         if password == 'password' and username == 'admin':
             session['logged_in'] = True
-            flash('You were successfully logged in')
             return redirect("/")
         else:
             flash('wrong password!')
