@@ -13,6 +13,10 @@ with open('schema.sql', 'r') as f:
     schema = f.read()
 conn.executescript(schema)
 
+conn.execute("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", ("John", "1234", "john@email.fr"))
+conn.execute("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", ("Jane", "6547", "jane@email.com"))
+
+conn.commit()
 # Close the BD connection
 conn.close()
 
@@ -24,10 +28,20 @@ conn.close()
 #     else:
 #         return show_the_login_form()
 
-@app.route("/<name>")
-def hello(name):
-    return f"<h2>Hello, {escape(name)}!<h2>"
+@app.route("/profile")
+def profile():
+    cur = conn.execute('SELECT * FROM users')
+    rows = cur.fetchall()
+    
+    html = "<ul>"
+    for row in rows:
+        html += "<li>" + row['username'] + ", " + row['email'] + "</li>"
+    html += "</ul>"
+    return html
 
 @app.route('/')
 def index():
-    return "<h1>This is a Flask app<h1>"
+    conn2 = sqlite3.connect('database.db')
+    cur = conn2.execute('SELECT username FROM users')
+    conn2.close()
+    return f'<h1>This is a Flask app of {cur}<h1>'
