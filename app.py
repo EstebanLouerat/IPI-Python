@@ -21,7 +21,7 @@ conn.close()
 @app.route('/')
 def index():
     if not session.get('logged_in'):
-        return render_template('login.html')
+        return redirect("/login")
     else:
         return render_template("index.html")
 
@@ -40,12 +40,22 @@ def list():
     db.close()
     return render_template("list.html", list=html)
 
-@app.route("/signup")
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        if password.length >= 4 and username == 'admin':
+            session['logged_in'] = True
+            flash('You were successfully logged in')
+            return redirect("/")
+        else:
+            flash('wrong password!')
     return render_template("signup.html")
 
 @app.route('/login', methods=['GET', 'POST'])
-def do_admin_login():
+def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -60,4 +70,4 @@ def do_admin_login():
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
-    return index()
+    return redirect("/")
