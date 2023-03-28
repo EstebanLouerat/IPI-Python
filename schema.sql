@@ -1,6 +1,5 @@
 -- Creation of the "users" table
-DROP TABLE IF EXISTS users;
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
@@ -8,8 +7,7 @@ CREATE TABLE users (
 );
 
 -- Creation of the "shopping_list" table
-DROP TABLE IF EXISTS shopping_list;
-CREATE TABLE shopping_list (
+CREATE TABLE IF NOT EXISTS shopping_list (
     id INT AUTO_INCREMENT PRIMARY KEY,
     item_name VARCHAR(255) NOT NULL,
     quantity INT NOT NULL,
