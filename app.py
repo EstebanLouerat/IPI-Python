@@ -27,28 +27,37 @@ def check_email_format(email: str) -> bool:
     else:
         return False
 
-
 @app.route('/')
 def index():
     if not session.get('logged_in'):
         return redirect("/login")
     else:
         return render_template("index.html")
+    
+@app.route("/additem", methods=['GET', 'POST'])
+def add_item():
+    if request.method == 'POST':
+        name = request.form['name']
+        quantity = request.form['quantity']
+        user_id = session["user_id"]
+        db = sqlite3.connect('database.db')
+        db.execute(f'INSERT INTO shopping_list (item_name, quantity, user_id) VALUES ("{name}", "{quantity}", "{user_id}")')
+        db.commit()
+        db.close()
+        return redirect("/")
+    return render_template("add_item.html")
 
 @app.route("/list")
 def list():
     db = sqlite3.connect('database.db')
-    cur = db.execute('SELECT * FROM users')
+    cur = db.execute('SELECT * FROM shopping_list')
     rows = cur.fetchall()
     columns = [column[0] for column in cur.description]
     
-    html = "<ul>"
-    for row in rows:
-        html += "<li>" + row[columns.index('username')] + ", " + row[columns.index('email')] + "</li>"
-    html += "</ul>"
-    
     db.close()
-    return render_template("list.html", list=html)
+    return render_template("list.html", list=rows)
+
+# Login, Sign up and Logout
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -70,6 +79,7 @@ def signup():
             return render_template("signup.html")
         else:
             session['logged_in'] = True
+            session['user_id'] = 1
             db = sqlite3.connect('database.db')
             db.execute(f'INSERT INTO users (username, password, email) VALUES ("{username}", "{password}", "{email}")')
             db.commit()
@@ -91,6 +101,7 @@ def login():
         for row in rows:
             if password == row[columns.index("password")] and username == row[columns.index("username")]:
                 session['logged_in'] = True
+                session['user_id'] = 1
                 return redirect("/")
         flash('wrong password or username!')
 
