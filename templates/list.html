@@ -13,20 +13,22 @@
 <div class="List">
   <div class="List-screen">
     <div class="text-center vh-100">
-      <h1 class="mt-auto mb-auto">The list: </h1>
-      <div class="alert">
-        {% for index in range(names | length) %}
-          <p>Item Name: {{ names[index] }} | Quantity: {{ quantities[index] }} </p>
-        {% endfor %}
+      <h1 class="List-title">The list: </h1>
+        <div class="List-Form"></div>
+          <div class="alert">
+            {% for index in range(names | length) %}
+            <p>Item Name: {{ names[index] }} | Quantity: {{ quantities[index] }} </p>
+            {% endfor %}
+          </div>
+        <a href="/">Return to home</a>
       </div>
-    <a href="/">Return to home</a>
-    </div>
-      {% else %}
-    <div class="text-center vh-100">
-      <h1 class="mt-auto mb-auto">The list is empty</h1>
-      <a href="/">Return to home</a>
+          {% else %}
+        <div class="text-center vh-100">
+          <h1 class="mt-auto mb-auto">The list is empty</h1>
+          <a href="/">Return to home</a>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
 {% endif %}

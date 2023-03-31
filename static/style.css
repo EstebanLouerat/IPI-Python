@@ -93,7 +93,17 @@ input:focus {
 }
 
 .List-screen {
-    background-color: #FFF;
+    background-color: #fff;
     padding: 20px;
     border-radius: 5px
+}
+
+.List-title {
+    text-align: center;
+    color: #777;
+}
+
+.List-form {
+    text-align: center;
+    color: #2980B9;
 }
