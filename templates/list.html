@@ -16,22 +16,25 @@
   <div class="List-screen">
     <div class="text-center vh-100">
       <h1 class="List-title">The list: </h1>
-        <div class="List-Form"></div>
+        <div class="List-Form">
           <div class="alert">
             {% for index in range(names | length) %}
             <p>Item Name: {{ names[index] }} | Quantity: {{ quantities[index] }} </p>
             {% endfor %}
           </div>
-          <button class="btn" class="btn btn-primary float-left submit-button"><a href="/">Return to home</a></button>
-      </div>
+          <div class="btn">
+          <button id="myButton" class="btn btn-primary float-left submit-button"><a href="/">Return to home</a></button>
+          </div>
+      
           {% else %}
         <div class="text-center vh-100">
           <h1 class="mt-auto mb-auto">The list is empty</h1>
           <button class="btn" class="btn btn-primary float-left submit-button"><a href="/">Return to home</a></button>
         </div>
       </div>
+      </div>
+      </div>
     </div>
-  </div>
 
 {% endif %}
 
