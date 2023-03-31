@@ -19,16 +19,20 @@
         <div class="List-Form">
           <div class="alert">
             {% for index in range(names | length) %}
-            <p>Item Name: {{ names[index] }} | Quantity: {{ quantities[index] }} </p>
+            <p>Item Name: {{ names[index] }} | Quantity: {{ quantities[index] }}
+              <form action="{{ url_for('delete_item', id=id[index]) }}" method="POST">
+                <button type="submit">Delete this item</button>
+            </form>
+            </p>
             {% endfor %}
           </div>
         
-          <button class="btn-return" class="btn btn-primary float-left submit-button"><a href="/">Return to home</a></button>
+          <a href="/">Return to home</a>
           
           {% else %}
         <div class="text-center vh-100">
           <h1 class="mt-auto mb-auto">The list is empty</h1>
-          <button class="btn-return" class="btn btn-primary float-left submit-button"><a href="/">Return to home</a></button>
+          <a href="/">Return to home</a>
         </div>
       </div>
       </div>
